@@ -8,66 +8,87 @@
     <title>Cadastro</title>
 
     <style>
-         body{background-image: url(http://s2.glbimg.com/CJRxuzh0enLW5LGEy76didWveIU=/e.glbimg.com/og/ed/f/original/2017/11/16/liga-da-justica.jpg);
-        background-size: cover;
-        background-repeat: no-repeat;
+        body {
+            background-image: url(http://s2.glbimg.com/CJRxuzh0enLW5LGEy76didWveIU=/e.glbimg.com/og/ed/f/original/2017/11/16/liga-da-justica.jpg);
+            background-size: cover;
+            background-repeat: no-repeat;
         }
+
         button {
             background-color: rgba(0, 0, 0, 0.42);
             padding: 20px 25px;
             border-radius: 2px;
-            border:none;
+            border: none;
             cursor: pointer;
             color: aliceblue;
             box-sizing: border-box;
         }
-        .ca  {position: absolute;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%,-50%);
-                width: 300px;
-                min-height: 100px;
-                background-color: rgba(0, 0, 0, 0.42);
-                border-radius: 30px;
-                padding: 50px;
-                box-sizing: border-box;
-                margin-top: 25px;
-                margin-right: 50px;}
-        </style>
+
+        .ca {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 300px;
+            min-height: 100px;
+            background-color: rgba(0, 0, 0, 0.42);
+            border-radius: 30px;
+            padding: 50px;
+            box-sizing: border-box;
+            margin-top: 25px;
+            margin-right: 50px;
+        }
+    </style>
 </head>
 
 <body>
 
-    
-    <form style="color:seashell" ;>
-        <center>
+      <center>
 
             <div class="ca">
-                <h1>Cadastro</h1> <br><br><br>
+                <h1 style="color:aliceblue">Cadastro</h1> <br><br><br>
 
-                Nome completo: <input type="text" id="nome"> <br><br>
+                <form style="color:aliceblue" id="cadastro" onsubmit="return verificar()">
+                    Nome completo: <input type="text" name="nome"> <br><br>
 
-                RG: <input type="number" id="rg"> <br><br>
+                    RG: <input type="number" name="rg"> <br><br>
 
-                CPF: <input type="number" id="cpf"> <br><br>
+                    CPF: <input type="number" name="cpf"> <br><br>
 
-                Login: <input type="text" id="login"> <br><br>
+                    Login: <input type="text" name="login"> <br><br>
 
-                Senha:<input type="password" id="senha"> <br><br><br>
+                    Senha:<input type="password" name="senha"> <br><br><br>
 
-                <button type="button" onclick="verificar()">Cadastrar</button>
+                    <button>Cadastrar</button>
+                </form>
             </div>
         </center>
-    </form>
+    
 </body>
 
 </html>
 
 <script>
-    function verificar(){
-        if (nome.value != '' && rg.value !='' && cpf.value !='' && login.value != '' && senha.value != '') {
-            alert('Você foi cadastrado. Seja bem vindo!!!');
-        } else {alert('Preencha todos os campo.');
+    function verificar() {
+        var formulario = new URLSearchParams(new FormData(cadastro));
+        fetch("/usuarios/cadastro", {
+            method: "POST",
+            body: formulario
+        }).then(function (response) {
+
+            if (response.ok) {
+
+                response.json().then(function (resposta) {
+
+                    sessionStorage.usuario_bandtec = resposta.nome;
+
+                });
+            } else {
+
+                alert('Erro de login!');
+            }
+        });
+
+        return false;
     }
-    }
-</script> 
+</script>
