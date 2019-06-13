@@ -77,11 +77,11 @@
         }).then(function (response) {
 
             if (response.ok) {
+                alert('Cadastro realizado com sucesso');
 
                 response.json().then(function (resposta) {
 
                     sessionStorage.usuario_bandtec = resposta.nome;
-
                 });
             } else {
 
